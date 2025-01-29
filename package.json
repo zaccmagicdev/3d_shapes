@@ -1,0 +1,17 @@
+{
+  "name": "3d-playground",
+  "version": "420.6.9",
+  "description": "For kool kids",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peter Parker",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.172.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.11"
+  }
+}
