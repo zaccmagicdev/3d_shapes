@@ -19,7 +19,7 @@ document.body.appendChild(renderer.domElement);
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(50, 10, 1, 1),
   new THREE.MeshBasicMaterial({
-    color: 0x50c878,
+    color: 0x228B22,
     side: THREE.DoubleSide,
   })
 );
@@ -32,6 +32,6 @@ renderer.setAnimationLoop(() => renderer.render(scene, camera));
 camera.position.z = 4;
 
 //first object
-const cube1 = new cube(scene, camera, renderer, 1, 1, 0, 0.6, 0xdd00ff, false);
+const cube1 = new cube(scene, camera, renderer, 1, 1, 0, 0.6, 0xD2122E, false);
 cube1.renderCube();
 
