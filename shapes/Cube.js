@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 class cube {
-  constructor(scene, camera, renderer, width, height, color, isWiremesh) {
+  constructor(scene, camera, renderer, width, height,xPos,yPos, color, isWiremesh) {
     this.color = color;
     this.scene = scene;
     this.camera = camera;
@@ -9,7 +9,7 @@ class cube {
     this.width = width;
     this.height = height;
     this.xPos = xPos;
-    this.Ypos = Ypos;
+    this.yPos = yPos;
     this.isWiremesh = isWiremesh;
   }
 
@@ -20,6 +20,7 @@ class cube {
     });
     const geometry = new THREE.BoxGeometry(this.width, this.height, 1, 1, 1);
     const cubeRendered = new THREE.Mesh(geometry, material);
+    cubeRendered.position.set(this.xPos, this.yPos, 100, 100);
 
     const _animateCube = () => {
       cubeRendered.rotation.x += 0.005;
