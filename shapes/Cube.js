@@ -20,7 +20,9 @@ class cube {
     });
     const geometry = new THREE.BoxGeometry(this.width, this.height, 1, 1, 1);
     const cubeRendered = new THREE.Mesh(geometry, material);
-    cubeRendered.position.set(this.xPos, this.yPos, 100, 100);
+    cubeRendered.position.set(this.xPos, this.yPos, 1);
+
+    console.log(cubeRendered);
 
     const _animateCube = () => {
       cubeRendered.rotation.x += 0.005;

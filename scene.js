@@ -27,12 +27,11 @@ const ground = new THREE.Mesh(
 ground.rotateX(Math.PI / 1.72);
 ground.rotateZ(Math.PI / 2);
 
-console.log(ground);
-
 scene.add(ground);
 renderer.setAnimationLoop(() => renderer.render(scene, camera));
 camera.position.z = 4;
 
 //first object
-const cube1 = new cube(scene, camera, renderer, 1, 1, 0xdd00ff, false);
+const cube1 = new cube(scene, camera, renderer, 1, 1, 0, 0.6, 0xdd00ff, false);
 cube1.renderCube();
+
