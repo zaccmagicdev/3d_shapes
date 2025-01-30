@@ -14,12 +14,14 @@ class cube {
   }
 
   renderCube() {
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshPhongMaterial({
       color: this.color,
       wireframe: this.isWiremesh,
     });
     const geometry = new THREE.BoxGeometry(this.width, this.height, 1, 1, 1);
     const cubeRendered = new THREE.Mesh(geometry, material);
+    cubeRendered.castShadow = true;
+    cubeRendered.receiveShadow = false;
     cubeRendered.position.set(this.xPos, this.yPos, 1);
 
     console.log(cubeRendered);
