@@ -2,29 +2,37 @@ import * as THREE from "three";
 import cube from "./shapes/Cube";
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color("#0d97ff");
+
 const camera = new THREE.PerspectiveCamera(
-  75,
+  80,
   window.innerWidth / window.innerHeight,
-  0.1,
-  1000
+  1,
+  2000
 );
 
 const renderer = new THREE.WebGLRenderer();
-const SIZE = 5;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-//creating a cube :0
-const test = new cube(scene, camera, renderer, 0xff00db);
-test.renderCube();
+//ground
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(50, 10, 1, 1),
+  new THREE.MeshBasicMaterial({
+    color: 0x50c878,
+    side: THREE.DoubleSide,
+  })
+);
 
-const test2 = new cube(scene, camera, renderer, 0x00efff)
-test2.renderCube();
-//rendering the scene
-/*function animate() {
-  cube.rotation.x += 0.005;
-  cube.rotation.y += 0.005;
-  renderer.render(scene, camera);
-}*/
+ground.rotateX(Math.PI / 1.72);
+ground.rotateZ(Math.PI / 2);
 
-//renderer.setAnimationLoop(animate);
+console.log(ground);
+
+scene.add(ground);
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+camera.position.z = 4;
+
+//first object
+const cube1 = new cube(scene, camera, renderer, 1, 1, 0xdd00ff, false);
+cube1.renderCube();
