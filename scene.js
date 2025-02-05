@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import cube from "./shapes/Cube";
+import { FlyControls } from 'three/addons/controls/FlyControls.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("#0d97ff");
@@ -15,6 +15,7 @@ camera.position.set(0, 2, 0);
 
 const renderer = new THREE.WebGLRenderer();
 
+
 //adding and enabling lighting :>
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -24,7 +25,7 @@ scene.add(ambientLight);
 
 //Create a DirectionalLight and turn on shadows for the light
 const light = new THREE.DirectionalLight( 0xffffff, 1 );
-light.position.set( 0, 1, 1 ); //default; light shining from top
+light.position.set( 0, 5, 0 ); //default; light shining from top
 light.visible = true;
 light.castShadow = true; // default false
 
@@ -43,6 +44,12 @@ console.log(light);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+const flyControls = new FlyControls(camera, renderer.domElement);
+console.log(flyControls)
+flyControls.mouseButtons.LEFT = THREE.MOUSE.LEFT;
+flyControls.mouseButtons.RIGHT = THREE.MOUSE.RIGHT;
+flyControls.dragToLook = false;
+flyControls.connect();
 
 //ground
 const ground = new THREE.Mesh(
@@ -54,7 +61,6 @@ const ground = new THREE.Mesh(
 );
 
 ground.rotateX(Math.PI / 2);
-//ground.rotateZ(Math.PI / 2);
 
 ground.receiveShadow = true;
 
@@ -62,7 +68,7 @@ scene.add(ground);
 renderer.setAnimationLoop(() => renderer.render(scene, camera));
 camera.position.z = 4;
 
-const sphereGeometry = new THREE.SphereGeometry( 1.3, 32, 32 );
+const sphereGeometry = new THREE.BoxGeometry( 2, 2, 2 );
 const sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
 const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
 sphere.castShadow = true; //default is false
@@ -74,6 +80,14 @@ scene.add( sphere );
 
 //first object
 
+const animateCube = () => {
+  sphere.rotation.x += 0.005;
+  sphere.rotation.y += 0.005;
 
-renderer.render(scene, camera);
+  flyControls.update(0.05);
+
+  renderer.render(scene, camera);
+};
+
+renderer.setAnimationLoop(animateCube)
 
