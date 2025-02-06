@@ -97,6 +97,13 @@ coneHouse.position.set(5, 2, 5);
 coneHouse.castShadow = true;
 scene.add(coneHouse)
 
+//concrete wall
+const wallGeo = new THREE.RingGeometry( 2, 2, 13 );
+const wallMaterial = new THREE.MeshStandardMaterial({color: 0x9b9b9b})
+const concreteWall = new THREE.Mesh(wallGeo, wallMaterial);
+concreteWall.castShadow = true;
+scene.add(concreteWall)
+
 const animate = () => {
   cube.rotation.x += 0.005;
   cube.rotation.y += 0.005;
