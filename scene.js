@@ -22,12 +22,12 @@ const renderer = new THREE.WebGLRenderer();
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
 //Create a DirectionalLight and turn on shadows for the light
 const light = new THREE.DirectionalLight( 0xffffff, 1 );
-light.position.set( 0, 5, 0 ); //default; light shining from top
+light.position.set( 4.5, 3, 0 ); //default; light shining from top
 light.visible = true;
 light.castShadow = true; // default false
 
@@ -54,7 +54,7 @@ flyControls.connect();
 const sky = new Sky();
 sky.scale.setScalar( 450000 );
 
-const phi = MathUtils.degToRad( 60 );
+const phi = MathUtils.degToRad( 83 );
 const theta = MathUtils.degToRad( 90 );
 const sunPosition = new Vector3().setFromSphericalCoords( 1, phi, theta );
 
@@ -84,17 +84,16 @@ const cubeGeometry = new THREE.BoxGeometry( 2, 2, 2 );
 const cubeMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
 const cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
 cube.castShadow = true; //default is false
-cube.receiveShadow = false; //default
 
 cube.position.y = 2.5
 
 scene.add( cube );
 
 //second object
-const coneGeometry = new THREE.ConeGeometry(4, 6, 20);
+const coneGeometry = new THREE.ConeGeometry(2, 4, 8);
 const coneMaterial = new THREE.MeshStandardMaterial( { color: 0x8080ff } );
 const coneHouse = new THREE.Mesh(coneGeometry, coneMaterial);
-coneHouse.position.set(3, 0, 2);
+coneHouse.position.set(5, 2, 5);
 coneHouse.castShadow = true;
 scene.add(coneHouse)
 
