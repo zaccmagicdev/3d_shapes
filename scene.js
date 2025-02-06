@@ -1,5 +1,8 @@
 import * as THREE from "three";
 import { FlyControls } from 'three/addons/controls/FlyControls.js';
+import { Sky } from 'three/addons/objects/Sky.js';
+import { MathUtils } from "three";
+import { Vector3 } from "three";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("#0d97ff");
@@ -15,7 +18,6 @@ camera.position.set(0, 2, 0);
 
 const renderer = new THREE.WebGLRenderer();
 
-
 //adding and enabling lighting :>
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -29,7 +31,6 @@ light.position.set( 0, 5, 0 ); //default; light shining from top
 light.visible = true;
 light.castShadow = true; // default false
 
-
 //Set up shadow properties for the light
 light.shadow.mapSize.width = 512; // default
 light.shadow.mapSize.height = 512; // default
@@ -38,18 +39,28 @@ light.shadow.camera.far = 10; // default
 
 scene.add( light );
 
-console.log(light);
-
-
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const flyControls = new FlyControls(camera, renderer.domElement);
 console.log(flyControls)
+flyControls.rollSpeed = Math.PI / 24;
 flyControls.mouseButtons.LEFT = THREE.MOUSE.LEFT;
 flyControls.mouseButtons.RIGHT = THREE.MOUSE.RIGHT;
-flyControls.dragToLook = false;
+flyControls.dragToLook = true;
 flyControls.connect();
+
+//adding a sky
+const sky = new Sky();
+sky.scale.setScalar( 450000 );
+
+const phi = MathUtils.degToRad( 60 );
+const theta = MathUtils.degToRad( 90 );
+const sunPosition = new Vector3().setFromSphericalCoords( 1, phi, theta );
+
+sky.material.uniforms.sunPosition.value = sunPosition;
+
+scene.add( sky );
 
 //ground
 const ground = new THREE.Mesh(
@@ -68,26 +79,33 @@ scene.add(ground);
 renderer.setAnimationLoop(() => renderer.render(scene, camera));
 camera.position.z = 4;
 
-const sphereGeometry = new THREE.BoxGeometry( 2, 2, 2 );
-const sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
-const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
-sphere.castShadow = true; //default is false
-sphere.receiveShadow = false; //default
-
-sphere.position.y = 2.5
-
-scene.add( sphere );
-
 //first object
+const cubeGeometry = new THREE.BoxGeometry( 2, 2, 2 );
+const cubeMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
+const cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+cube.castShadow = true; //default is false
+cube.receiveShadow = false; //default
 
-const animateCube = () => {
-  sphere.rotation.x += 0.005;
-  sphere.rotation.y += 0.005;
+cube.position.y = 2.5
+
+scene.add( cube );
+
+//second object
+const coneGeometry = new THREE.ConeGeometry(4, 6, 20);
+const coneMaterial = new THREE.MeshStandardMaterial( { color: 0x8080ff } );
+const coneHouse = new THREE.Mesh(coneGeometry, coneMaterial);
+coneHouse.position.set(3, 0, 2);
+coneHouse.castShadow = true;
+scene.add(coneHouse)
+
+const animate = () => {
+  cube.rotation.x += 0.005;
+  cube.rotation.y += 0.005;
 
   flyControls.update(0.05);
 
   renderer.render(scene, camera);
 };
 
-renderer.setAnimationLoop(animateCube)
+renderer.setAnimationLoop(animate)
 
