@@ -110,6 +110,10 @@ const animate = () => {
 
   flyControls.update(0.05);
 
+  document.addEventListener('keydown', (e) => {
+    e.key === 'Shift' && flyControls.update(0.001)
+  })
+
   renderer.render(scene, camera);
 };
 
