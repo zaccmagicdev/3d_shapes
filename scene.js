@@ -1,6 +1,8 @@
 import * as THREE from "three";
-import { FlyControls } from 'three/addons/controls/FlyControls.js';
-import { Sky } from 'three/addons/objects/Sky.js';
+import { FlyControls } from "three/addons/controls/FlyControls.js";
+import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { Sky } from "three/addons/objects/Sky.js";
 import { MathUtils } from "three";
 import { Vector3 } from "three";
 
@@ -14,7 +16,11 @@ const camera = new THREE.PerspectiveCamera(
   2000
 );
 
-camera.position.set(0, 2, 0);
+function resetPosition(){
+  camera.position.set(0, 2, 0);
+}
+
+resetPosition();
 
 const renderer = new THREE.WebGLRenderer();
 
@@ -26,8 +32,8 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
 //Create a DirectionalLight and turn on shadows for the light
-const light = new THREE.DirectionalLight( 0xffffff, 1 );
-light.position.set( 4.5, 3, 0 ); //default; light shining from top
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(4.5, 3, 0); //default; light shining from top
 light.visible = true;
 light.castShadow = true; // default false
 
@@ -37,13 +43,13 @@ light.shadow.mapSize.height = 512; // default
 light.shadow.camera.near = 0.1; // default
 light.shadow.camera.far = 10; // default
 
-scene.add( light );
+scene.add(light);
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const flyControls = new FlyControls(camera, renderer.domElement);
-console.log(flyControls)
+console.log(flyControls);
 flyControls.rollSpeed = Math.PI / 24;
 flyControls.mouseButtons.LEFT = THREE.MOUSE.LEFT;
 flyControls.mouseButtons.RIGHT = THREE.MOUSE.RIGHT;
@@ -52,21 +58,21 @@ flyControls.connect();
 
 //adding a sky
 const sky = new Sky();
-sky.scale.setScalar( 450000 );
+sky.scale.setScalar(450000);
 
-const phi = MathUtils.degToRad( 83 );
-const theta = MathUtils.degToRad( 90 );
-const sunPosition = new Vector3().setFromSphericalCoords( 1, phi, theta );
+const phi = MathUtils.degToRad(83);
+const theta = MathUtils.degToRad(90);
+const sunPosition = new Vector3().setFromSphericalCoords(1, phi, theta);
 
 sky.material.uniforms.sunPosition.value = sunPosition;
 
-scene.add( sky );
+scene.add(sky);
 
 //ground
 const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(20, 20, 32, 32),
+  new THREE.PlaneGeometry(200, 200, 32, 32),
   new THREE.MeshStandardMaterial({
-    color: 0x228B22,
+    color: 0x228b22,
     side: THREE.DoubleSide,
   })
 );
@@ -80,29 +86,53 @@ renderer.setAnimationLoop(() => renderer.render(scene, camera));
 camera.position.z = 4;
 
 //first object
-const cubeGeometry = new THREE.BoxGeometry( 2, 2, 2 );
-const cubeMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
-const cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+const cubeGeometry = new THREE.BoxGeometry(2, 2, 2);
+const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 cube.castShadow = true; //default is false
 
-cube.position.y = 2.5
+cube.position.y = 2.5;
 
-scene.add( cube );
+scene.add(cube);
 
 //second object
 const coneGeometry = new THREE.ConeGeometry(2, 4, 8);
-const coneMaterial = new THREE.MeshStandardMaterial( { color: 0x8080ff } );
+const coneMaterial = new THREE.MeshStandardMaterial({ color: 0x8080ff });
 const coneHouse = new THREE.Mesh(coneGeometry, coneMaterial);
 coneHouse.position.set(5, 2, 5);
 coneHouse.castShadow = true;
-scene.add(coneHouse)
+scene.add(coneHouse);
 
 //concrete wall
-const wallGeo = new THREE.RingGeometry( 2, 2, 13 );
-const wallMaterial = new THREE.MeshStandardMaterial({color: 0x9b9b9b})
+const wallGeo = new THREE.RingGeometry(2, 2, 13);
+const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x9b9b9b });
 const concreteWall = new THREE.Mesh(wallGeo, wallMaterial);
 concreteWall.castShadow = true;
-scene.add(concreteWall)
+scene.add(concreteWall);
+
+//somefuntext
+const loader = new FontLoader();
+
+loader.load("fonts/helvetiker_regular.typeface.json", function (font) {
+  const txtGeometry = new TextGeometry("Hello three.js!", {
+    font: font,
+    size: 80,
+    depth: 5,
+    curveSegments: 12,
+    bevelEnabled: true,
+    bevelThickness: 10,
+    bevelSize: 8,
+    bevelOffset: 0,
+    bevelSegments: 5,
+  });
+  const textMaterial = new THREE.MeshStandardMaterial({ color: 0xff0080 });
+  const txtMesh = new THREE.Mesh(txtGeometry, textMaterial);
+  scene.add(txtMesh);
+});
+
+document.addEventListener("keydown", (e) => {
+ e.key === "]" && resetPosition();
+})
 
 const animate = () => {
   cube.rotation.x += 0.005;
@@ -110,12 +140,11 @@ const animate = () => {
 
   flyControls.update(0.05);
 
-  document.addEventListener('keydown', (e) => {
-    e.key === 'Shift' && flyControls.update(0.001)
-  })
+  document.addEventListener("keydown", (e) => {
+    e.key === "Shift" && flyControls.update(0.001);
+  });
 
   renderer.render(scene, camera);
 };
 
-renderer.setAnimationLoop(animate)
-
+renderer.setAnimationLoop(animate);
